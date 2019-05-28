@@ -1,5 +1,5 @@
-name: deadoralive
-description: An app built using Flutter for web
+name: corsdetector
+description: Detects if an endpoint allows or deny CORS requests
 
 environment:
   # You must be using Flutter >=1.5.0 or Dart >=2.3.0
