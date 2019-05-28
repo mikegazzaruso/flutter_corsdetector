@@ -41,7 +41,8 @@ class _MyHomePage extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dead or Alive - Made with Flutter'),
+        title:
+            Text('CORS Detector - Made with Flutter For Web by Mike Gazzaruso'),
         centerTitle: true,
       ),
       body: Center(
@@ -67,7 +68,7 @@ class _MyHomePage extends State<MyHomePage> {
                         controller: _myController,
                         autofocus: true,
                         decoration: const InputDecoration(
-                          helperText: "Enter a FQDN or an URL",
+                          helperText: "Enter a valid URL",
                           hintText: "Ex.: http://server.to.test",
                           helperStyle: TextStyle(
                             fontSize: 18.0,
@@ -120,6 +121,7 @@ class _MyHomePage extends State<MyHomePage> {
       u.lang = 'en-US';
       u.rate = 1.0;
       _isBusy = false;
+      print(response.body);
       if (response.body == 'Not Found') {
         _message = "Sorry: can't resolve this endpoint";
       } else {
@@ -135,9 +137,11 @@ class _MyHomePage extends State<MyHomePage> {
       u.lang = 'en-US';
       u.rate = 1.0;
       _isBusy = false;
+      print(error.runtimeType.toString());
       switch (error.toString()) {
         case 'XMLHttpRequest error.':
-          _message = 'This server seems to deny cross origin requests';
+          _message =
+              "This server seems to deny cross origin requests, or it doesn't exist";
           break;
         default:
           _message = 'There was an unexpected error';
