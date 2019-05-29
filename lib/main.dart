@@ -9,7 +9,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CORS Detector',
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: 'Titillium Web',
+      ),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
@@ -38,11 +41,16 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    _myController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('CORS Detector - Made with Flutter For Web by Mike Gazzaruso'),
+        title: Text('CORS Detector - Made in Flutter For Web'),
         centerTitle: true,
       ),
       body: Center(
@@ -68,8 +76,8 @@ class _MyHomePage extends State<MyHomePage> {
                         controller: _myController,
                         autofocus: true,
                         decoration: const InputDecoration(
-                          helperText: "Enter a valid URL",
-                          hintText: "Ex.: http://server.to.test",
+                          helperText: "Enter a valid http(s) URL",
+                          hintText: "Ex.: https://server.to.test",
                           helperStyle: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -97,7 +105,13 @@ class _MyHomePage extends State<MyHomePage> {
               ),
             ),
             Flexible(
-              child: Text(_message),
+              child: Text(
+                _message,
+                style: TextStyle(
+                  fontSize: 22.0,
+                  color: _message.contains('allow') ? Colors.green : Colors.red,
+                ),
+              ),
             ),
           ],
         ),
@@ -106,8 +120,11 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   _handleOnChanged(String value) {
+    const urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    final match = RegExp(urlPattern, caseSensitive: false).firstMatch(value);
     setState(() {
-      _canVerify = value.isNotEmpty;
+      _canVerify = match != null;
     });
   }
 
@@ -136,17 +153,10 @@ class _MyHomePage extends State<MyHomePage> {
       final u = SpeechSynthesisUtterance();
       u.lang = 'en-US';
       u.rate = 1.0;
-      _isBusy = false;
-      print(error.runtimeType.toString());
-      switch (error.toString()) {
-        case 'XMLHttpRequest error.':
-          _message =
-              "This server seems to deny cross origin requests, or it doesn't exist";
-          break;
-        default:
-          _message = 'There was an unexpected error';
-      }
-      setState(() {});
+      setState(() {
+        _isBusy = false;
+        _message = "This server seems to deny cross origin requests";
+      });
       u.text = _message;
       window.speechSynthesis.speak(u);
     });

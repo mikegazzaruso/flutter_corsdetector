@@ -1,9 +1,9 @@
 [
   {
-    "family": "Roboto",
+    "family": "Titillium Web",
     "fonts": [
       {
-        "asset": "fonts/Roboto-Regular.ttf"
+        "asset": "fonts/TitilliumWeb-Regular.ttf"
       }
     ]
   }
